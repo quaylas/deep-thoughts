@@ -5,12 +5,14 @@ const expiration = '2h';
 
 const signToken = function({ username, email, _id }) {
     const payload = { username, email, _id };
+    const secret = process.env.JWT_SECRET;
     
-    return jwt.sign({ data: payload }, process.env.JWT_SECRET, { expiresIn: expiration });
+    return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
 };
 
 const authMiddleware = function({ req }) {
     let token = req.body.token || req.query.token || req.headers.authorization;
+    const secret = process.env.JWT_SECRET;
 
     // separate "Bearer" from token value
     if(req.headers.authorization){
@@ -18,10 +20,12 @@ const authMiddleware = function({ req }) {
         .split(' ')
         .pop()
         .trim();
+        console.log('token from  headers!');
     }
 
     // if no token, return request object as-is
     if(!token) {
+        console.log('no token!');
         return req;
     }
 
@@ -39,6 +43,5 @@ const authMiddleware = function({ req }) {
 
 module.exports = {
     signToken ,
-
     authMiddleware
 };
