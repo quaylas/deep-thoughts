@@ -20,12 +20,10 @@ const authMiddleware = function({ req }) {
         .split(' ')
         .pop()
         .trim();
-        console.log('token from  headers!');
     }
 
     // if no token, return request object as-is
     if(!token) {
-        console.log('no token!');
         return req;
     }
 
